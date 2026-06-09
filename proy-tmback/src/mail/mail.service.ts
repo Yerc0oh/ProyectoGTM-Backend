@@ -1,38 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
-import { turnoComprobanteTemplate } from './mail.templates';
-
+import { Resend } from 'resend';
 
 @Injectable()
 export class MailService {
+  private resend = new Resend(process.env.RESEND_API_KEY);
 
-    constructor(
-        private readonly mailer: MailerService,
-    ) { }
+  async sendMail(options: {
+    to: string;
+    subject: string;
+    html: string;
+  }) {
+    return this.resend.emails.send({
+      from: process.env.MAIL_FROM!,
+      to: options.to,
+      subject: options.subject,
+      html: options.html,
+    });
+  }
 
-    async enviarPrueba(
-        destino: string,
-    ) {
-        await this.mailer.sendMail({
-            to: destino,
-
-            subject: 'Prueba de correo',
-
-            text: 'Hola, este es un correo de prueba.',
-        });
-    }
-
-    async sendMail(options: {
-        to: string;
-        subject: string;
-        text?: string;
-        html?: string;
-    }) {
-        return this.mailer.sendMail({
-            to: options.to,
-            subject: options.subject,
-            text: options.text,
-            html: options.html,
-        });
-    }
+  async enviarPrueba(destino: string) {
+    return this.sendMail({
+      to: destino,
+      subject: 'Prueba de correo',
+      html: '<h1>Hola 👋 Resend funcionando</h1>',
+    });
+  }
 }

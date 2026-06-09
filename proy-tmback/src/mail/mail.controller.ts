@@ -19,4 +19,10 @@ export class MailController {
       mensaje: 'Correo enviado',
     };
   }
+  @Get('test-resend')
+  async testResend() {
+    await this.mailService.enviarPrueba(
+      'abedcalderonq@gmail.com',
+    );
+  }
 }

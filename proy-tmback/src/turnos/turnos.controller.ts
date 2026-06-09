@@ -74,4 +74,5 @@ export class TurnosController {
   enviarMasivos() {
     return this.turnosService.enviarRecordatoriosMasivos();
   }
+
 }

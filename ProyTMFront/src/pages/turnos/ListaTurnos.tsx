@@ -107,16 +107,13 @@ function ListaTurnos() {
   const formatFecha = (fechaHora: string) => {
     const fecha = new Date(fechaHora);
 
-    return fecha.toLocaleDateString();
+    return fecha.toISOString();
   };
 
   const formatHora = (fechaHora: string) => {
     const fecha = new Date(fechaHora);
 
-    return fecha.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+    return fecha.toISOString().slice(11, 16);
   };
 
 

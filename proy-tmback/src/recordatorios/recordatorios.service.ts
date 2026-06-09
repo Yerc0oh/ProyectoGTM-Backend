@@ -4,15 +4,20 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class RecordatoriosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   // cada 5 minutos
   @Cron('*/5 * * * *')
   async enviarRecordatorios() {
     const ahora = new Date();
 
-    const limiteInferior = new Date(ahora.getTime());
-    const limiteSuperior = new Date(ahora.getTime() + 24 * 60 * 60 * 1000);
+    const limiteInferior = ahora;
+    const limiteSuperior = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    console.log("AHORA:", ahora);
+    console.log("LIMITE INFERIOR:", limiteInferior);
+    console.log("LIMITE SUPERIOR:", limiteSuperior);
+
 
     const turnos = await this.prisma.turno.findMany({
       where: {
@@ -28,6 +33,9 @@ export class RecordatoriosService {
         doctor: true,
       },
     });
+
+    console.log("Fechas turnos:")
+    turnos.forEach((t) => console.log(t.fechaHora));
 
     for (const turno of turnos) {
       try {

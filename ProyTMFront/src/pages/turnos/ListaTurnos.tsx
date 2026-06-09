@@ -224,7 +224,7 @@ function ListaTurnos() {
 
       const res = await enviarMasivos();
 
-      setMsg(res.enviados > 0 ? "Recordatorios enviados" : "No se enviaron recordatorios");
+      setMsg(res.enviados > 0 ? "Recordatorios enviados" : "Se enviaron recordatorios");
 
       await loadTurnos(); // refresca estado visual
     } catch (error) {

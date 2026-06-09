@@ -57,7 +57,7 @@ function Inicio() {
           Bienvenido{user ? `, ${(user as User).nombre} ${(user as User).apellido}` : ""}
         </h1>
         <p className="inicio-subtitle">
-          Al sistema de gestión de turnos de la Clínica PLACEHOLDER
+          Al sistema de gestión de turnos de la Clínica
         </p>
 
         {/* Turnos de hoy */}

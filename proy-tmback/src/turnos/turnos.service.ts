@@ -565,10 +565,7 @@ export class TurnosService {
     const turnos = await this.prisma.turno.findMany({
       where: {
         recordatorioEnviado: false,
-        fechaHora: {
-          gte: new Date(),
-          lte: new Date(),
-        },
+        
         estado: {
           in: ['PENDIENTE', 'CONFIRMADO'],
         },

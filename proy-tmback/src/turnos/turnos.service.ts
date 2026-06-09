@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateTurnoDto } from './dto/create-turno.dto';
@@ -559,16 +560,12 @@ export class TurnosService {
   }
 
   async enviarRecordatoriosMasivos() {
-    const ahora = new Date();
-    const limite = new Date();
-    limite.setHours(limite.getHours() + 24);
-
     const turnos = await this.prisma.turno.findMany({
       where: {
         recordatorioEnviado: false,
         fechaHora: {
-          gte: ahora,
-          lte: limite,
+          gte: new Date(),
+          lte: new Date(),
         },
         estado: {
           in: ['PENDIENTE', 'CONFIRMADO'],
@@ -580,27 +577,47 @@ export class TurnosService {
           include: { especialidad: true },
         },
       },
+      orderBy: {
+        fechaHora: 'asc',
+      },
     });
 
+
+    setImmediate(() => {
+      this.procesarRecordatorios(turnos);
+    });
+
+    return {
+      message: "Proceso de recordatorios iniciado",
+      total: turnos.length,
+    };
+  }
+
+  private async procesarRecordatorios(turnos: any[]) {
     let enviados = 0;
 
     for (const turno of turnos) {
-      if (!turno.paciente.email) continue;
+      try {
+        if (!turno.paciente.email) continue;
 
-      await this.enviarCorreoRecordatorio(turno);
+        await this.enviarCorreoRecordatorio(turno);
 
-      await this.prisma.turno.update({
-        where: { id: turno.id },
-        data: {
-          recordatorioEnviado: true,
-          fechaRecordatorio: new Date(),
-        },
-      });
+        await this.prisma.turno.update({
+          where: { id: turno.id },
+          data: {
+            recordatorioEnviado: true,
+            fechaRecordatorio: new Date(),
+          },
+        });
 
-      enviados++;
+        enviados++;
+      } catch (err) {
+        console.error(`Error en turno ${turno.id}`, err);
+        continue;
+      }
     }
 
-    return { enviados };
+    console.log("Recordatorios enviados:", enviados);
   }
 
   @Cron('0 * * * *') // cada hora

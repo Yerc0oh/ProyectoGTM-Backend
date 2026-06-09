@@ -10,12 +10,15 @@ export class MailService {
     subject: string;
     html: string;
   }) {
-    return this.resend.emails.send({
+    const result = await this.resend.emails.send({
       from: process.env.MAIL_FROM!,
       to: options.to,
       subject: options.subject,
       html: options.html,
     });
+
+    console.log(`RESEND RESPONSE:`, result);
+    return result;
   }
 
   async enviarPrueba(destino: string) {

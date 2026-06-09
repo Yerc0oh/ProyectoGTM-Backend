@@ -88,6 +88,7 @@ function Register() {
         email: form.email,
         password: form.password,
         rol: "USER",
+        estado: true,
       });
 
       alert("Usuario registrado exitosamente. Ahora puedes iniciar sesión.");

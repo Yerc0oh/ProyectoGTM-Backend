@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = "http://localhost:3000/pacientes";
+const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API = `${apiUrl}/pacientes`;
 
 export const getPacientes = async () => {
   const res = await axios.get(API);

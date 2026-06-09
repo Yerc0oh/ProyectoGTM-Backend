@@ -3,6 +3,9 @@ import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LogsService } from '../logs/logs.service';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { PrismaService } from '../prisma/prisma.service';
+
 
 @Injectable()
 export class AuthService {
@@ -11,6 +14,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private logsService: LogsService,
+    private prisma: PrismaService,
   ) {}
 
   async login(email: string, password: string, req: any) {
@@ -61,5 +65,32 @@ export class AuthService {
     });
     return { message: 'Logout exitoso' };
   }
-  
+
+  async register(dto: CreateUserDto) {
+    const existingUser = await this.usersService.findByEmail(dto.email);
+
+    if (existingUser) {
+      throw new Error('El email ya está registrado');
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    const user = await this.prisma.usuario.create({
+      data: {
+        nombre: dto.nombre,
+        apellido: dto.apellido,
+        email: dto.email,
+        password: hashedPassword,
+        rol: dto.rol,
+      },
+    });
+
+    return {
+      id: user.id,
+      nombre: user.nombre,
+      apellido: user.apellido,
+      email: user.email,
+    };
+    
+  }
 }

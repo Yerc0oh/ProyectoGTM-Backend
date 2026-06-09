@@ -517,20 +517,26 @@ export class TurnosService {
 
     const fecha = new Date(turno.fechaHora);
 
-    await this.mailService.sendMail({
-      to: turno.paciente.email,
-      subject: '📅 Recordatorio de turno médico',
-      html: turnoComprobanteTemplate({
-        paciente: `${turno.paciente.nombre} ${turno.paciente.apellido}`,
-        doctor: `Dr. ${turno.doctor.nombre} ${turno.doctor.apellido}`,
-        especialidad: turno.doctor.especialidad?.nombre,
-        fecha: fecha.toISOString().split('T')[0], // YYYY-MM-DD estable
-        hora: fecha.toLocaleTimeString('es-BO', {
-          hour: '2-digit',
-          minute: '2-digit',
+    try {
+      await this.mailService.sendMail({
+        to: turno.paciente.email,
+        subject: '📅 Recordatorio de turno médico',
+        html: turnoComprobanteTemplate({
+          paciente: `${turno.paciente.nombre} ${turno.paciente.apellido}`,
+          doctor: `Dr. ${turno.doctor.nombre} ${turno.doctor.apellido}`,
+          especialidad: turno.doctor.especialidad?.nombre,
+          fecha: fecha.toISOString().split('T')[0],
+          hora: fecha.toLocaleTimeString('es-BO', {
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
         }),
-      }),
-    });
+      });
+
+      console.log(`✔ Email enviado a ${turno.paciente.email}`);
+    } catch (err) {
+      console.error(`❌ Error enviando email turno ${turno.id}`, err);
+    }
   }
 
   async enviarRecordatorio(turnoId: number) {
@@ -565,7 +571,12 @@ export class TurnosService {
     const turnos = await this.prisma.turno.findMany({
       where: {
         recordatorioEnviado: false,
-        
+
+        fechaHora: {
+          gte: new Date(),
+          lte: new Date(Date.now() + 24 * 60 * 60 * 1000),
+        },
+
         estado: {
           in: ['PENDIENTE', 'CONFIRMADO'],
         },
@@ -583,13 +594,7 @@ export class TurnosService {
     console.log("Turnos para recordatorios:", turnos.length);
     console.log("TODOS los turnos:", await this.prisma.turno.findMany());
 
-    setImmediate(async () => {
-      try {
-        await this.procesarRecordatorios(turnos);
-      } catch (e) {
-        console.error("Error en proceso async:", e);
-      }
-    });
+    await this.procesarRecordatorios(turnos);
 
     return {
       message: "Proceso de recordatorios iniciado",
@@ -607,7 +612,7 @@ export class TurnosService {
       console.log("Turno", turno.id);
       try {
         if (!turno.paciente.email) continue;
-        
+
         console.log("Enviando correo a", turno.paciente.email);
 
         await this.enviarCorreoRecordatorio(turno);

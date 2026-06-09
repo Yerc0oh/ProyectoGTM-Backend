@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DoctoresService } from './doctores.service';
 import { CreateDoctorDto } from './dto/create-doctore.dto';
 import { UpdateDoctoreDto } from './dto/update-doctore.dto';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('doctores')
 export class DoctoresController {
@@ -18,17 +19,17 @@ export class DoctoresController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.doctoresService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctoreDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDoctorDto: UpdateDoctoreDto) {
     return this.doctoresService.update(+id, updateDoctorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.doctoresService.remove(+id);
   }
 }

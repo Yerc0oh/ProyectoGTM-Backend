@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -34,7 +34,7 @@ model LogAcceso {
   browser String
   evento  logacceso_evento
 
-  fechaHora DateTime @default(now())
+  fechaHora DateTime @default(now()) @db.Timestamptz
 
   @@map("logacceso")
 }
@@ -93,6 +93,8 @@ model Doctor {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("doctor") // agregado para consistencia
 }
 
 model Disponibilidad {
@@ -101,15 +103,17 @@ model Disponibilidad {
   doctorId Int
   doctor   Doctor @relation(fields: [doctorId], references: [id])
 
-  diaSemana String
+  diaSemana String @db.VarChar(10)
 
-  horaInicio String
-  horaFin    String
+  horaInicio String @db.VarChar(5)
+  horaFin    String @db.VarChar(5)
 
   estado Boolean @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("disponibilidad") // agregado para consistencia
 }
 
 model Turno {
@@ -121,7 +125,7 @@ model Turno {
   pacienteId Int
   paciente   Paciente @relation(fields: [pacienteId], references: [id])
 
-  fechaHora DateTime
+  fechaHora DateTime @db.Timestamptz // timezone-aware para evitar problemas con el unique
 
   estado EstadoTurno @default(PENDIENTE)
 
@@ -129,12 +133,13 @@ model Turno {
 
   recordatorioEnviado Boolean @default(false)
 
-  fechaRecordatorio DateTime?
+  fechaRecordatorio DateTime? @db.Timestamptz
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([doctorId, fechaHora])
+  @@map("turno")
 }
 
 enum EstadoTurno {

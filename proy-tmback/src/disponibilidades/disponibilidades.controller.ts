@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { DisponibilidadesService } from './disponibilidades.service';
 import { CreateDisponibilidadDto } from './dto/create-disponibilidade.dto';
 import { UpdateDisponibilidadDto } from './dto/update-disponibilidade.dto';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('disponibilidades')
 export class DisponibilidadesController {
@@ -18,17 +19,17 @@ export class DisponibilidadesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.disponibilidadesService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDisponibilidadDto: UpdateDisponibilidadDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateDisponibilidadDto: UpdateDisponibilidadDto) {
     return this.disponibilidadesService.update(+id, updateDisponibilidadDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.disponibilidadesService.remove(+id);
   }
 }

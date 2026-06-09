@@ -27,12 +27,12 @@ export class TurnosController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTurnoDto: UpdateTurnoDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateTurnoDto: UpdateTurnoDto) {
     return this.turnosService.update(+id, updateTurnoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.turnosService.remove(+id);
   }
 

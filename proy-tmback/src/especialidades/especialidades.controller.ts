@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { EspecialidadesService } from './especialidades.service';
 import { CreateEspecialidadeDto } from './dto/create-especialidade.dto';
 import { UpdateEspecialidadeDto } from './dto/update-especialidade.dto';
+import { ParseIntPipe } from '@nestjs/common';
 
 @Controller('especialidades')
 export class EspecialidadesController {
@@ -18,17 +19,17 @@ export class EspecialidadesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.especialidadesService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEspecialidadeDto: UpdateEspecialidadeDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateEspecialidadeDto: UpdateEspecialidadeDto) {
     return this.especialidadesService.update(+id, updateEspecialidadeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.especialidadesService.remove(+id);
   }
 }

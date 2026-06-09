@@ -92,7 +92,7 @@ function TurnoForm() {
         fecha: fecha.toISOString().split("T")[0],
 
         hora: fecha
-          .toTimeString()
+          .toISOString()
           .slice(0, 5),
 
         motivoConsulta:

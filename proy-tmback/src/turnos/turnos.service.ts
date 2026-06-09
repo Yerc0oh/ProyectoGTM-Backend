@@ -583,8 +583,12 @@ export class TurnosService {
     });
 
 
-    setImmediate(() => {
-      this.procesarRecordatorios(turnos);
+    setImmediate(async () => {
+      try {
+        await this.procesarRecordatorios(turnos);
+      } catch (e) {
+        console.error("Error en proceso async:", e);
+      }
     });
 
     return {

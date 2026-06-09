@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id       Int     @id @default(autoincrement())
+  nombre   String
+  apellido String
+  email    String  @unique
+  password String
+  rol      Rol     @default(USER)
+  estado   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  logsAcceso LogAcceso[]
+
+  @@map("usuario")
+}
+
+model LogAcceso {
+  id Int @id @default(autoincrement())
+
+  usuarioId Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+
+  ip      String
+  browser String
+  evento  logacceso_evento
+
+  fechaHora DateTime @default(now())
+
+  @@map("logacceso")
+}
+
+model Especialidad {
+  id          Int     @id @default(autoincrement())
+  nombre      String  @db.VarChar(50)
+  descripcion String? @db.Text
+  estado      Boolean @default(true)
+
+  doctores Doctor[]
+
+  @@map("especialidad")
+}
+
+model Paciente {
+  id Int @id @default(autoincrement())
+
+  nombre   String @db.VarChar(50)
+  apellido String @db.VarChar(50)
+
+  email String? @db.VarChar(100)
+
+  telefono String @db.VarChar(20)
+
+  fecha_nacimiento DateTime @db.Date
+
+  direccion String @db.VarChar(255)
+
+  estado Boolean @default(true)
+
+  turnos Turno[]
+
+  @@map("paciente")
+}
+
+model Doctor {
+  id Int @id @default(autoincrement())
+
+  nombre   String
+  apellido String
+
+  email String @unique
+
+  telefono String
+
+  estado Boolean @default(true)
+
+  especialidadId Int
+
+  especialidad Especialidad @relation(fields: [especialidadId], references: [id])
+
+  disponibilidades Disponibilidad[]
+
+  turnos Turno[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Disponibilidad {
+  id Int @id @default(autoincrement())
+
+  doctorId Int
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  diaSemana String
+
+  horaInicio String
+  horaFin    String
+
+  estado Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Turno {
+  id Int @id @default(autoincrement())
+
+  doctorId Int
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
+
+  pacienteId Int
+  paciente   Paciente @relation(fields: [pacienteId], references: [id])
+
+  fechaHora DateTime
+
+  estado EstadoTurno @default(PENDIENTE)
+
+  motivoConsulta String?
+
+  recordatorioEnviado Boolean @default(false)
+
+  fechaRecordatorio DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([doctorId, fechaHora])
+}
+
+enum EstadoTurno {
+  PENDIENTE
+  CONFIRMADO
+  CANCELADO
+  COMPLETADO
+}
+
+enum logacceso_evento {
+  INGRESO
+  SALIDA
+}
+
+enum Rol {
+  ADMIN
+  USER
+}

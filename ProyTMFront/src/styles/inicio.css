@@ -1,0 +1,154 @@
+.inicio-container {
+  max-width: 720px;
+}
+
+/* Saludo */
+.inicio-role-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.inicio-greeting {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.inicio-subtitle {
+  font-size: 0.875rem;
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+}
+
+/* Etiqueta de sección */
+.inicio-section-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.inicio-section-label span {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Lista de turnos */
+.inicio-turnos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.inicio-turno-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.turno-hora {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  min-width: 52px;
+}
+
+.turno-info {
+  flex: 1;
+}
+
+.turno-paciente {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0;
+}
+
+.turno-doctor {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+
+/* Caja vacía */
+.inicio-empty {
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 1.5rem;
+}
+
+.inicio-empty-icon {
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+
+/* Botones */
+.inicio-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inicio-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 20px;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.inicio-btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.inicio-btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  background: #25D366;
+  color: white;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.inicio-btn-whatsapp:hover {
+  background: #1ebe5d;
+}
+
+.wa-icon {
+  width: 18px;
+  height: 18px;
+  fill: white;
+  flex-shrink: 0;
+}

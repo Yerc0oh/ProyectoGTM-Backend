@@ -584,6 +584,7 @@ export class TurnosService {
       },
     });
     console.log("Turnos para recordatorios:", turnos.length);
+    console.log("TODOS los turnos:", await this.prisma.turno.findMany());
 
     setImmediate(async () => {
       try {

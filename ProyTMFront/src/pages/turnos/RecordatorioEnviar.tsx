@@ -4,11 +4,7 @@ import "../../styles/forms.css";
 
 /* ================= TYPES ================= */
 
-type User = {
-  username: string;
-  rol?: string;
-  isSuperuser?: boolean;
-};
+
 
 /* ================= MOCK API ================= */
 
@@ -24,11 +20,8 @@ const mockAPI = {
 
 /* ================= COMPONENT ================= */
 
-type Props = {
-  user: User | null;
-};
 
-function RecordatorioEnviar({ user }: Props) {
+function RecordatorioEnviar() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -47,7 +40,7 @@ function RecordatorioEnviar({ user }: Props) {
   };
 
   return (
-    <TurnosLayout user={user}>
+    <TurnosLayout>
       <div className="form-container">
         <h2>🔔 Enviar Recordatorios</h2>
 

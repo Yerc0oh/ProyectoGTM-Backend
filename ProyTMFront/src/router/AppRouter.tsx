@@ -178,7 +178,7 @@ export default function AppRouter() {
       <Route
         path="/turnos/recordatorios"
         element={
-          <RecordatorioEnviar user={user} />
+          <RecordatorioEnviar/>
         }
       />
 

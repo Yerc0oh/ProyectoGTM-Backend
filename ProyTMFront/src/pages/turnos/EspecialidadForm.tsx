@@ -6,11 +6,7 @@ import { createEspecialidad, updateEspecialidad, getEspecialidadById } from "../
 
 /* ================= TYPES ================= */
 
-type User = {
-  username: string;
-  rol?: string;
-  isSuperuser?: boolean;
-};
+
 
 type EspecialidadFormData = {
   nombre: string;
@@ -18,10 +14,6 @@ type EspecialidadFormData = {
 };
 
 /* ================= COMPONENT ================= */
-
-type Props = {
-  user: User | null;
-};
 
 function EspecialidadForm() {
   const navigate = useNavigate();

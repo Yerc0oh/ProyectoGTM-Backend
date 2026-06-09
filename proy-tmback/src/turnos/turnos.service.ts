@@ -560,6 +560,8 @@ export class TurnosService {
   }
 
   async enviarRecordatoriosMasivos() {
+    console.log("Enviando recordatorios masivos");
+
     const turnos = await this.prisma.turno.findMany({
       where: {
         recordatorioEnviado: false,
@@ -581,7 +583,7 @@ export class TurnosService {
         fechaHora: 'asc',
       },
     });
-
+    console.log("Turnos para recordatorios:", turnos.length);
 
     setImmediate(async () => {
       try {
@@ -600,9 +602,15 @@ export class TurnosService {
   private async procesarRecordatorios(turnos: any[]) {
     let enviados = 0;
 
+    console.log("Enviando recordatorios");
+
+
     for (const turno of turnos) {
+      console.log("Turno", turno.id);
       try {
         if (!turno.paciente.email) continue;
+        
+        console.log("Enviando correo a", turno.paciente.email);
 
         await this.enviarCorreoRecordatorio(turno);
 
@@ -615,6 +623,8 @@ export class TurnosService {
         });
 
         enviados++;
+
+        console.log("Recordatorio enviado");
       } catch (err) {
         console.error(`Error en turno ${turno.id}`, err);
         continue;
